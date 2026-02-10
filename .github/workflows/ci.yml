@@ -1,0 +1,37 @@
+name: CI
+
+# Disparadores: cada vez que hagas push o pull request
+on:
+  push:
+    branches: [ "main" ]   # o la rama que uses
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest  # entorno de ejecución
+
+    steps:
+      # 1. Descargar tu código
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      # 2. Configurar JDK (Java 17 en este caso)
+      - name: Configurar JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      #3. Cache de Gradle para acelerar builds
+      - name: Cache de Gradle
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # 4. Ejecutar tus tests con parámetros
+      - name: Ejecutar tests
+        run: ./gradlew test -Dcucumber.filter.tags="@LoginSuccess" -Dheadless=true
