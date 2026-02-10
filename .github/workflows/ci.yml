@@ -1,15 +1,14 @@
 name: CI
 
-# Disparadores: cada vez que hagas push o pull request
 on:
   push:
-    branches: [ "main" ]   # o la rama que uses
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
 
 jobs:
   build:
-    runs-on: ubuntu-latest  # entorno de ejecución
+    runs-on: ubuntu-latest
 
     steps:
       # 1. Descargar tu código
@@ -23,7 +22,7 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      #3. Cache de Gradle para acelerar builds
+      # 3. Cache de Gradle para acelerar builds
       - name: Cache de Gradle
         uses: actions/cache@v4
         with:
@@ -36,11 +35,16 @@ jobs:
       - name: Ejecutar tests
         run: ./gradlew test -Dcucumber.filter.tags="@LoginSuccess" -Dheadless=true
 
-      - name: Subir reporte Cucumber como artefacto
+      # 5. Paso de depuración: listar archivos generados
+      - name: Listar reportes generados
+        run: ls -R build/reports/tests/test
+
+      # 6. Subir reporte como artefacto
+      - name: Subir reporte de pruebas
         uses: actions/upload-artifact@v4
         with:
-          name: cucumber-report
-          path: target/screenshots/cucumber-reports.html
+          name: test-report
+          path: build/reports/tests/test
 
   deploy:
     runs-on: ubuntu-latest
@@ -52,11 +56,11 @@ jobs:
       - name: Descargar reporte
         uses: actions/download-artifact@v4
         with:
-          name: cucumber-report
-          path: ./cucumber-report
+          name: test-report
+          path: ./test-report
 
       - name: Deploy a GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./cucumber-report
+          publish_dir: ./test-report
