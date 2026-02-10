@@ -35,3 +35,28 @@ jobs:
       # 4. Ejecutar tus tests con parámetros
       - name: Ejecutar tests
         run: ./gradlew test -Dcucumber.filter.tags="@LoginSuccess" -Dheadless=true
+
+      - name: Subir reporte Cucumber como artefacto
+        uses: actions/upload-artifact@v4
+        with:
+          name: cucumber-report
+          path: target/screenshots/cucumber-reports.html
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout código
+        uses: actions/checkout@v4
+
+      - name: Descargar reporte
+        uses: actions/download-artifact@v4
+        with:
+          name: cucumber-report
+          path: ./cucumber-report
+
+      - name: Deploy a GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./cucumber-report
