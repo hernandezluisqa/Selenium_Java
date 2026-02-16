@@ -31,7 +31,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Ejecutar tests
-        run: ./gradlew test
+        run: gradle test
 
       - name: Listar reportes generados
         run: ls -R build/reports/tests/test
