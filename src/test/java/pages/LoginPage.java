@@ -4,18 +4,23 @@ import org.openqa.selenium.WebDriver;
 
 public class LoginPage extends BasePage{
 
-    String titleText = "//h1[text()='Login']";
-    String usernameInput = "//input[@id='userName']";
+    String usernameInput = "//input[@id='username']";
     String passwordInput = "//input[@id='password']";
-    String loginButton = "//button[@id='login']";
-    String newUserButton = "//button[@id='newUser']";
+    String loginButton = "//button[@id='login-btn']";
+    String errorMessage = "//div[@id='login-error']";
 
     public LoginPage(WebDriver driver) {
         super(driver);
     }
 
+    public void goToLoginPage() {
+        navigateTo("https://homebanking-demo-tests.netlify.app/");
+    }
+
     public void verifyOnLoginPage() {
-        Find(titleText);
+        Find(usernameInput).isDisplayed();
+        Find(passwordInput).isDisplayed();
+        Find(loginButton).isDisplayed();
     }
 
     public void fillForm(String username, String password) {
@@ -24,11 +29,10 @@ public class LoginPage extends BasePage{
     }
 
     public void clickLoginButton() {
-        forceClick(loginButton);
-        //clickElement(loginButton);
+        clickElement(loginButton);
     }
 
-    public void clickNewUserButton() {
-        clickElement(newUserButton);
+    public String getErrorMessage() {
+        return Find(errorMessage).getText();
     }
 }

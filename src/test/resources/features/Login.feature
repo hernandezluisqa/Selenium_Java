@@ -1,9 +1,22 @@
 Feature: Inicio de sesion
   @LoginSuccess
   Scenario: Usuario inicia sesion exitosamente
-    Given el usuario está en la página principal "https://demoqa.com/books"
-    And hace clic en el botón de login
-    When ingresa el usuario "Curso2024" y la contraseña "diciembreUpex_24$"
-    And hace clic en el botón de login del formulario
-    Then debería ser redirigido al perfil del usuario
+    Given el usuario se encuenta en la pagina de Login de Home Banking
+    When ingresa el usuario "demo" y la contraseña "demo123"
+    And hace clic en el botón Ingresar
+    Then debería ser redirigido al panel principal del usuario "Juan Pérez"
+
+  Scenario Outline: Login con Credenciales Inválidas
+    Given el usuario se encuenta en la pagina de Login de Home Banking
+    When ingresa el usuario "<username>" y la contraseña "<password>"
+    And hace clic en el botón Ingresar
+    Then se muestra mensaje de error
+    And permanece en Login
+
+    Examples:
+      | username | password     |
+      | demo     | demo123fail  |
+      | demofail | demo123      |
+      | demofail | demo123fail  |
+
 

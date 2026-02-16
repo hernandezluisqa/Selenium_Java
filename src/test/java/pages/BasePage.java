@@ -21,7 +21,7 @@ public class BasePage {
 
     public BasePage(WebDriver driver) {
         this.driver = driver;
-        this.wait  = new WebDriverWait(driver, Duration.ofSeconds(5));
+        this.wait  = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
     /**
@@ -65,7 +65,7 @@ public class BasePage {
      * @return El WebElement encontrado.
      */
     protected WebElement Find(String locator) {
-        return wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(locator)));
+        return wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(locator)));
     }
 
     /**
@@ -82,7 +82,7 @@ public class BasePage {
      * @param locator El locator XPath del elemento al que se le quiere hacer click.
      */
     public void clickElement(String locator) {
-        Find(locator).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.xpath(locator))).click();
     }
 
     /**
