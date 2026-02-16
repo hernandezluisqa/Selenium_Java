@@ -25,38 +25,19 @@ jobs:
       - name: Cache de Gradle
         uses: actions/cache@v4
         with:
-          path: ~/.gradle/caches
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      - name: Ejecutar tests
-        run: gradle test
+      - name: Compilar y ejecutar tests
+        run: ./gradlew build
 
-      - name: Listar reportes generados
-        run: ls -R build/reports/tests/test
-
-      - name: Subir reporte de pruebas
+      - name: Publicar reportes de test
+        if: always() # asegura que se suban incluso si los tests fallan
         uses: actions/upload-artifact@v4
         with:
-          name: test-report
+          name: test-reports
           path: build/reports/tests/test
-
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - name: Checkout código
-        uses: actions/checkout@v4
-
-      - name: Descargar reporte
-        uses: actions/download-artifact@v4
-        with:
-          name: test-report
-          path: ./test-report
-
-      - name: Deploy a GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./test-report
