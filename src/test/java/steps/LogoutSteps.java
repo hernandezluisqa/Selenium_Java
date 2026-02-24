@@ -4,13 +4,12 @@ import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
-import org.junit.Assert;
 import pages.LoginPage;
-import pages.ProfilePage;
+import pages.PanelPrincipalPage;
 
 public class LogoutSteps {
     LoginPage loginPage = new LoginPage(Hooks.driver);
-    ProfilePage profilePage = new ProfilePage(Hooks.driver);
+    PanelPrincipalPage profilePage = new PanelPrincipalPage(Hooks.driver);
 
     @Given("el usuario ha iniciado sesion exitosamente")
     public void successLogin() {

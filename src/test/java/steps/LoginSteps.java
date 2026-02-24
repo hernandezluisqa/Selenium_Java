@@ -6,11 +6,11 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.testng.Assert;
 import pages.LoginPage;
-import pages.ProfilePage;
+import pages.PanelPrincipalPage;
 
 public class LoginSteps {
     LoginPage loginPage = new LoginPage(Hooks.driver);
-    ProfilePage profilePage = new ProfilePage(Hooks.driver);
+    PanelPrincipalPage profilePage = new PanelPrincipalPage(Hooks.driver);
 
     @Given("el usuario se encuenta en la pagina de Login de Home Banking")
     public void goToMainPage() {
